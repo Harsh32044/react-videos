@@ -15,8 +15,8 @@ export default function Hero() {
     setVideos(newVidArr);
   };
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-4 my-8">
-      <div className="col-span-1 row-span-2 pl-8">
+    <div className="grid grid-cols-3 my-8">
+      <div className="col-span-1 pl-8">
         <Playlist
           videos={videos}
           onSelectVideo={handleVideoSelect}

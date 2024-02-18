@@ -4,7 +4,7 @@ export default function ListItem({video, videos, onSelectVideo}) {
             const currVideoSelected = videos.filter(vid => vid.id === video.id)
             onSelectVideo(currVideoSelected[0])
         }}>
-            <div><img src={video.thumbnailUrl} alt="" className="rounded-lg"/></div>
+            <img src={video.thumbnailUrl} alt="" className="rounded-lg aspect-video object-cover"/>
             <div className="flex flex-col justify-between">
                 <div className="font-bold text-sm">{video.title}</div>
                 <div className="text-xs">{video.author}</div>
