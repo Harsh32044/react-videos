@@ -6,6 +6,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
   const [fullscreen, setFullscreen] = useState(false);
   const [miniplayer, setMiniplayer] = useState(false);
   const [volume, setVolume] = useState(1);
+  const [screenSizeSmall, setScreenSizeSmall] = useState(window.screen.width < 768)
   const [time, setTime] = useState({
     currentTime: "00:00",
     totalTime: "00:00",
@@ -83,22 +84,24 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
     document.addEventListener("leavepictureinpicture", () =>
       setMiniplayer(false)
     );
-
+    window.addEventListener("resize", () => setScreenSizeSmall(window.screen.width < 768))
+    
     video.addEventListener("loadeddata", loadDuration);
     video.addEventListener("timeupdate", updateCurrentTime);
     timeLineContainer.addEventListener("click", handleTimelineUpdate);
-
+    
     return () => {
       timeLineContainer.removeEventListener("click", handleTimelineUpdate);
       document.removeEventListener("enterpictureinpicture", () =>
-        setMiniplayer(true)
+      setMiniplayer(true)
       );
       document.removeEventListener("leavepictureinpicture", () =>
-        setMiniplayer(false)
+      setMiniplayer(false)
       );
       video.removeEventListener("loadeddata", loadDuration);
       document.removeEventListener("keydown", handleKeyDown);
       video.removeEventListener("timeupdate", updateCurrentTime);
+      window.removeEventListener("resize", () => setScreenSizeSmall(window.screen.width < 768))
     };
   }, []);
   // Duration Formatting
@@ -221,7 +224,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
         volume == 0 ? "none" : volume > 0 && volume < 0.5 ? "low" : "high"
       }`}
     >
-      <div className="video-controls-container">
+      <div className={`video-controls-container ${screenSizeSmall ? 'hidden' : ''}`}>
         <div
           className="timeline-container h-2 mx-1 group"
           ref={timeLineContainerRef}
@@ -338,7 +341,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
           src={video.videoUrl}
           poster={video.thumbnailUrl}
           onClick={handlePlayPause}
-          controls={false}
+          controls={screenSizeSmall ? true : false}
           autoPlay={true}
           onEnded={() => {
             const currVideoId = video.id;

@@ -1,6 +1,6 @@
 export default function ListItem({video, videos, onSelectVideo}) {
     return (
-        <div className="grid md:grid-cols-2 gap-3 cursor-pointer py-4" onClick={() => {
+        <div className="grid md:grid-cols-2 gap-3 cursor-pointer items-center py-4 pl-4" onClick={() => {
             const currVideoSelected = videos.filter(vid => vid.id === video.id)
             onSelectVideo(currVideoSelected[0])
         }}>
