@@ -6,7 +6,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
   const [fullscreen, setFullscreen] = useState(false);
   const [miniplayer, setMiniplayer] = useState(false);
   const [volume, setVolume] = useState(1);
-  const [screenSizeSmall, setScreenSizeSmall] = useState(window.screen.width < 768)
+  const [screenSizeSmall, setScreenSizeSmall] = useState(window.screen.width < 500)
   const [time, setTime] = useState({
     currentTime: "00:00",
     totalTime: "00:00",
@@ -83,7 +83,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
     document.addEventListener("leavepictureinpicture", () =>
       setMiniplayer(false)
     );
-    window.addEventListener("resize", () => setScreenSizeSmall(window.screen.width < 768))
+    window.addEventListener("resize", () => setScreenSizeSmall(window.screen.width < 500))
     
     video.addEventListener("loadeddata", loadDuration);
     video.addEventListener("timeupdate", updateCurrentTime);
@@ -100,7 +100,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
       video.removeEventListener("loadeddata", loadDuration);
       document.removeEventListener("keydown", handleKeyDown);
       video.removeEventListener("timeupdate", updateCurrentTime);
-      window.removeEventListener("resize", () => setScreenSizeSmall(window.screen.width < 768))
+      window.removeEventListener("resize", () => setScreenSizeSmall(window.screen.width < 500))
     };
   }, []);
   // Duration Formatting
@@ -343,12 +343,12 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
           controls={screenSizeSmall ? true : false}
           autoPlay={true}
           onEnded={() => {
-            const currVideoId = video.id;
-            let nextVidId = 0;
-            if (currVideoId < videos.length - 1) {
-              nextVidId = parseInt(currVideoId) + 1;
+            const currVideoIndex = videos.findIndex(vid => vid.id === video.id)
+            let nextVidIndex = 0;
+            if (currVideoIndex < videos.length - 1) {
+              nextVidIndex = parseInt(currVideoIndex) + 1;
             }
-            onSelectVideo(videos.filter((vid) => vid.id == nextVidId)[0]);
+            onSelectVideo(videos[nextVidIndex]);
           }}
         >
           Your Browser Doesn't Support Videos!
