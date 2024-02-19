@@ -15,19 +15,19 @@ export default function Hero() {
     setVideos(newVidArr);
   };
   return (
-    <div className="grid grid-cols-3 my-8">
-      <div className="col-span-1 pl-8">
-        <Playlist
-          videos={videos}
-          onSelectVideo={handleVideoSelect}
-          onChangeOrder={handleVideosArray}
-        />
-      </div>
-      <div className="col-span-2 pt-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 my-8">
+      <div className="col-span-1 lg:col-span-2 my-6">
         <VideoItem
           video={selectedVideoIndex}
           videos={videos}
           onSelectVideo={handleVideoSelect}
+        />
+      </div>
+      <div className="col-span-1 pl-4">
+        <Playlist
+          videos={videos}
+          onSelectVideo={handleVideoSelect}
+          onChangeOrder={handleVideosArray}
         />
       </div>
     </div>

@@ -12,7 +12,6 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
     totalTime: "00:00",
   });
   const [speed, setSpeed] = useState("1X");
-  const [isDragging, setIsDragging] = useState(false);
   const videoRef = useRef(null);
   const videoContainerRef = useRef(null);
   const timeLineContainerRef = useRef(null);
