@@ -1,6 +1,10 @@
 import { Draggable } from "react-beautiful-dnd";
+import { useSetRecoilState } from "recoil";
+import { selectedVideoAtom } from "../atoms";
 
-export default function ListItem({ video, onSelectVideo, index }) {
+export default function ListItem({ video, index }) {
+
+  const onSelectVideo = useSetRecoilState(selectedVideoAtom)
   return (
     <Draggable draggableId={video.id.toString()} index={index}>
       {(provided) => (
@@ -8,7 +12,7 @@ export default function ListItem({ video, onSelectVideo, index }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="grid grid-cols-2 gap-3 items-center py-4"
+          className="grid grid-cols-2 gap-3 items-center py-4 px-5"
           onClick={() => {
             onSelectVideo(video);
           }}

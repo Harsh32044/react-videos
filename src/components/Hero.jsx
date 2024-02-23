@@ -1,16 +1,23 @@
 import Playlist from "./Playlist";
 import VideoItem from "./VideoItem";
-import data from "../assets/videos.json";
-import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { DragDropContext } from "react-beautiful-dnd";
+import { selectedVideoAtom, videosAtom } from "../atoms";
 
 export default function Hero() {
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(data.videos[0]);
-  const [videos, setVideos] = useState(data.videos);
+  const [videos, setVideos] = useRecoilState(videosAtom);
+  const currentVideo = useRecoilValue(selectedVideoAtom);
 
-  const handleVideoSelect = (index) => {
-    setSelectedVideoIndex(index);
-  };
+  const approxFormatter = new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  });
+
+  const exactFormatterIndian = new Intl.NumberFormat('en-IN', {
+    useGrouping: true,
+    maximumFractionDigits: 0
+  });  
 
   const handleDragEnd = (result) => {
     const { source, destination, draggableId } = result;
@@ -37,14 +44,16 @@ export default function Hero() {
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="grid grid-cols-1 lg:grid-cols-3 my-8">
         <div className="col-span-1 lg:col-span-2 my-6">
-          <VideoItem
-            video={selectedVideoIndex}
-            videos={videos}
-            onSelectVideo={handleVideoSelect}
-          />
+          <VideoItem />
+          <div className="pt-2 mx-12">
+            <div className="font-bold text-xl">{currentVideo.title}</div>
+            <div className="text-xs text-gray-400">{approxFormatter.format(parseFloat(currentVideo.subscriber))} Subscribers</div>
+            <div className="text-md pt-4">{currentVideo.description}</div>
+            <div className="text-md pt-4">{exactFormatterIndian.format(parseFloat(currentVideo.subscriber))} Subscribers</div>
+          </div>
         </div>
         <div className="col-span-1 pl-4">
-          <Playlist videos={videos} onSelectVideo={handleVideoSelect} />
+          <Playlist />
         </div>
       </div>
     </DragDropContext>

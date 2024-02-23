@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedVideoAtom, videosAtom } from "../atoms";
 
-export default function VideoItem({ video, videos, onSelectVideo }) {
+export default function VideoItem() {
   const [play, setPlay] = useState(true);
   const [theatre, setTheatre] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -11,7 +13,10 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
     currentTime: "00:00",
     totalTime: "00:00",
   });
+  const [video, setVideo] = useRecoilState(selectedVideoAtom)
+
   const [speed, setSpeed] = useState("1X");
+  const videos = useRecoilValue(videosAtom)
   const videoRef = useRef(null);
   const videoContainerRef = useRef(null);
   const timeLineContainerRef = useRef(null);
@@ -46,26 +51,6 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
       }
     };
 
-    const loadDuration = () => {
-      setTime({
-        ...time,
-        totalTime: durationFormatting(video.duration),
-      });
-    };
-
-    const updateCurrentTime = () => {
-      setTime({
-        ...time,
-        totalTime: durationFormatting(video.duration),
-        currentTime: durationFormatting(video.currentTime),
-      });
-      const currentPercentage = video.currentTime / video.duration;
-      timeLineContainer.style.setProperty(
-        "--progress-position",
-        currentPercentage
-      );
-    };
-
     const handleTimelineUpdate = (event) => {
       const video = videoRef.current;
       const rectangle = timeLineContainer.getBoundingClientRect();
@@ -85,8 +70,6 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
     );
     window.addEventListener("resize", () => setScreenSizeSmall(window.screen.width < 500))
     
-    video.addEventListener("loadeddata", loadDuration);
-    video.addEventListener("timeupdate", updateCurrentTime);
     timeLineContainer.addEventListener("click", handleTimelineUpdate);
     
     return () => {
@@ -97,9 +80,7 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
       document.removeEventListener("leavepictureinpicture", () =>
       setMiniplayer(false)
       );
-      video.removeEventListener("loadeddata", loadDuration);
       document.removeEventListener("keydown", handleKeyDown);
-      video.removeEventListener("timeupdate", updateCurrentTime);
       window.removeEventListener("resize", () => setScreenSizeSmall(window.screen.width < 500))
     };
   }, []);
@@ -213,6 +194,32 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
     setSpeed(`${playbackRate}X`);
     video.playbackRate = playbackRate;
   };
+
+  // Update current time
+  const updateCurrentTime = () => {
+    const timeLineContainer = timeLineContainerRef.current
+    const video = videoRef.current
+    setTime({
+      ...time,
+      totalTime: durationFormatting(video.duration),
+      currentTime: durationFormatting(video.currentTime),
+    });
+    const currentPercentage = video.currentTime / video.duration;
+    timeLineContainer.style.setProperty(
+      "--progress-position",
+      currentPercentage
+    );
+  };
+
+  //On Video Load
+  const loadDuration = () => {
+    const video = videoRef.current
+    setTime({
+      ...time,
+      totalTime: durationFormatting(video.duration),
+    });
+  };
+
   return (
     <div
       ref={videoContainerRef}
@@ -348,8 +355,10 @@ export default function VideoItem({ video, videos, onSelectVideo }) {
             if (currVideoIndex < videos.length - 1) {
               nextVidIndex = parseInt(currVideoIndex) + 1;
             }
-            onSelectVideo(videos[nextVidIndex]);
+            setVideo(videos[nextVidIndex]);
           }}
+          onTimeUpdate={updateCurrentTime}
+          onLoadedData={loadDuration}
         >
           Your Browser Doesn't Support Videos!
         </video>
