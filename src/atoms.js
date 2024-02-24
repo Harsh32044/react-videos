@@ -11,4 +11,9 @@ const selectedVideoAtom = atom({
     default: data.videos[0]
 })
 
-export {videosAtom, selectedVideoAtom}
+const theatreModeAtom = atom({
+    key: 'theatreMode',
+    default: false,
+})
+
+export {videosAtom, selectedVideoAtom, theatreModeAtom}

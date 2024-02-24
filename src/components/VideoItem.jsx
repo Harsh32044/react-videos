@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedVideoAtom, videosAtom } from "../atoms";
+import { selectedVideoAtom, theatreModeAtom, videosAtom } from "../atoms";
 
 export default function VideoItem() {
   const [play, setPlay] = useState(true);
-  const [theatre, setTheatre] = useState(false);
+  const [theatre, setTheatre] = useRecoilState(theatreModeAtom)
   const [fullscreen, setFullscreen] = useState(false);
   const [miniplayer, setMiniplayer] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -223,14 +223,15 @@ export default function VideoItem() {
   return (
     <div
       ref={videoContainerRef}
-      className={`video-container ${play ? "" : "paused"} ${
-        theatre ? "theatre" : ""
-      } ${fullscreen ? "fullscreen" : ""} ${miniplayer ? "mini-player" : ""}`}
+      className={`video-container ${play ? '' : 'paused'} ${
+        theatre ? 'theatre' : ''
+      } ${fullscreen ? 'fullscreen' : ''} ${miniplayer ? 'mini-player' : ''} relative w-11/12 max-w-[1000px] flex content-center mx-auto bg-black`}
       data-volume-level={`${
         volume == 0 ? "none" : volume > 0 && volume < 0.5 ? "low" : "high"
       }`}
     >
-      <div className={`video-controls-container ${screenSizeSmall ? 'hidden' : ''}`}>
+      <div className={`video-controls-container ${screenSizeSmall ? 'hidden' : ''} 
+      absolute bottom-0 right-0 left-0 text-white z-[100] opacity-0 transition-opacity delay-150 ease-in-out`}>
         <div
           className="timeline-container h-2 mx-1 group"
           ref={timeLineContainerRef}

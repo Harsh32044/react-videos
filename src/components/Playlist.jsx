@@ -7,7 +7,7 @@ export default function Playlist() {
   const videos = useRecoilValue(videosAtom)
   return (
     <>
-      <header className="font-semibold text-lg px-5">Current Queue</header>
+      <header className="font-semibold text-lg md:px-5">Current Queue</header>
       <div className="max-h-dvh place-items-baseline overflow-y-scroll scroll-smooth">
         <Droppable droppableId="playlist-1">
           {(provided) => (

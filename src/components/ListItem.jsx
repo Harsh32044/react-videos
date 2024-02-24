@@ -12,7 +12,7 @@ export default function ListItem({ video, index }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="grid grid-cols-2 gap-3 items-center py-4 px-5"
+          className="grid grid-cols-2 gap-3 items-center py-4 md:px-5"
           onClick={() => {
             onSelectVideo(video);
           }}

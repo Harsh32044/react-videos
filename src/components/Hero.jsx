@@ -2,11 +2,14 @@ import Playlist from "./Playlist";
 import VideoItem from "./VideoItem";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { DragDropContext } from "react-beautiful-dnd";
-import { selectedVideoAtom, videosAtom } from "../atoms";
+import { selectedVideoAtom, theatreModeAtom, videosAtom } from "../atoms";
+import { useState } from "react";
 
 export default function Hero() {
   const [videos, setVideos] = useRecoilState(videosAtom);
   const currentVideo = useRecoilValue(selectedVideoAtom);
+  const [isDescVisible, setIsDescVisible] = useState(false)
+  const theatreMode = useRecoilValue(theatreModeAtom)
 
   const approxFormatter = new Intl.NumberFormat('en-US', {
     notation: 'compact',
@@ -43,13 +46,15 @@ export default function Hero() {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="grid grid-cols-1 lg:grid-cols-3 my-8">
-        <div className="col-span-1 lg:col-span-2 my-6">
+        <div className={`col-span-1 lg:col-span-2 ${theatreMode ? 'lg:col-span-3' : ''} mt-6`}>
           <VideoItem />
-          <div className="pt-2 mx-12">
+          <div className="pt-2 mx-4 md:mx-10">
             <div className="font-bold text-xl">{currentVideo.title}</div>
             <div className="text-xs text-gray-400">{approxFormatter.format(parseFloat(currentVideo.subscriber))} Subscribers</div>
+            <div className={`${isDescVisible ? '' : 'line-clamp-1'} cursor-pointer`} onClick={() => setIsDescVisible(!isDescVisible)}>
             <div className="text-md pt-4">{currentVideo.description}</div>
             <div className="text-md pt-4">{exactFormatterIndian.format(parseFloat(currentVideo.subscriber))} Subscribers</div>
+            </div>
           </div>
         </div>
         <div className="col-span-1 pl-4">
