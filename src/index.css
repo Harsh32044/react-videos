@@ -30,16 +30,6 @@ video {
   width: 100%;
 }
 
-.video-container {
-  position: relative;
-  width: 90%;
-  max-width: 1000px;
-  display: flex;
-  justify-content: center;
-  margin-inline: auto;
-  background-color: black;
-}
-
 .video-container.theatre,
 .video-container.fullscreen {
   max-width: initial;
@@ -50,17 +40,6 @@ video {
 }
 .video-container.fullscreen {
   max-height: 100vh ;
-}
-
-.video-controls-container {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  color: white;
-  z-index: 100;
-  opacity: 0;
-  transition: opacity 150ms ease-in-out;
 }
 
 .video-container:hover .video-controls-container,
